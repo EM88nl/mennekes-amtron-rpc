@@ -1,0 +1,24 @@
+{
+  "modbus": {
+    "port": "COM3",
+    "baudRate": 57600,
+    "dataBits": 8,
+    "stopBits": 2,
+    "parity": "none",
+    "slaveId": 1,
+    "timeout": 1000,
+    "reconnectInterval": 5000,
+    "maxRetries": 3
+  },
+  "rpc": {
+    "port": 8080
+  },
+  "heartbeat": {
+    "enabled": true,
+    "interval": 9000
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/amtron-rpc.log"
+  }
+}
