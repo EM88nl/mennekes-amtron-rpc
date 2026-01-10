@@ -808,8 +808,7 @@ export const MODBUS_CONFIG = {
   STOP_BITS: 2,
   PARITY: 'none',
   DEFAULT_SLAVE_ID: 1,
-  BYTE_ORDER: 'BE', // Big Endian
-  WORD_ORDER: 'LE', // LowWord / HighWord
+  BYTE_ORDER: 'BE', // Big Endian (ABCD word order)
   HEARTBEAT_INTERVAL: 10000, // 10 seconds in milliseconds
   HEARTBEAT_VALUE: 0x55AA,
   MIN_CHARGING_CURRENT: 6, // Minimum 6A to start charging

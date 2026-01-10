@@ -52,7 +52,7 @@ export class ModbusClient extends EventEmitter {
     try {
       this.logger.info(`Connecting to Modbus RTU on ${this.config.port}...`);
 
-      await this.client.connectRTUBuffered(this.config.port, {
+      await this.client.connectRTU(this.config.port, {
         baudRate: this.config.baudRate,
         dataBits: this.config.dataBits,
         stopBits: this.config.stopBits,
@@ -296,10 +296,10 @@ export class ModbusClient extends EventEmitter {
           return (buffer.readInt16BE(2) << 16) | buffer.readInt16BE(0);
 
         case 'float':
-          // IEEE 754 float32 with LowWord/HighWord order
+          // IEEE 754 float32 with big-endian byte order (ABCD)
           const tempBuffer = Buffer.allocUnsafe(4);
-          tempBuffer.writeUInt16BE(buffer.readUInt16BE(2), 0);
-          tempBuffer.writeUInt16BE(buffer.readUInt16BE(0), 2);
+          tempBuffer.writeUInt16BE(buffer.readUInt16BE(0), 0);
+          tempBuffer.writeUInt16BE(buffer.readUInt16BE(2), 2);
           return tempBuffer.readFloatBE(0);
 
         case 'ascii':
@@ -347,11 +347,11 @@ export class ModbusClient extends EventEmitter {
           return [buffer.readUInt16BE(0), buffer.readUInt16BE(2)];
 
         case 'float':
-          // Write IEEE 754 float32 with LowWord/HighWord order
+          // Write IEEE 754 float32 with big-endian byte order (ABCD)
           const tempBuffer = Buffer.allocUnsafe(4);
           tempBuffer.writeFloatBE(value, 0);
-          buffer.writeUInt16BE(tempBuffer.readUInt16BE(2), 0);
-          buffer.writeUInt16BE(tempBuffer.readUInt16BE(0), 2);
+          buffer.writeUInt16BE(tempBuffer.readUInt16BE(0), 0);
+          buffer.writeUInt16BE(tempBuffer.readUInt16BE(2), 2);
           return [buffer.readUInt16BE(0), buffer.readUInt16BE(2)];
 
         default:
