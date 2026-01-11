@@ -303,16 +303,26 @@ export class ModbusClient extends EventEmitter {
           return tempBuffer.readFloatBE(0);
 
         case 'ascii':
-          // For ASCII in Modbus, we need to swap bytes within each register
-          // Each register is 16 bits (2 bytes), but bytes might be reversed
+          // Debug: Log the raw buffer
+          this.logger.debug(`Raw ASCII buffer for ${register.name}: ${buffer.toString('hex')}`);
+
+          // Try different byte orders to find which works
+          // Option 1: No swap (ABCD)
+          const noSwap = buffer.toString('ascii').replace(/\0/g, '').trim();
+
+          // Option 2: Swap bytes within each register (BADC)
           const swappedBuffer = Buffer.allocUnsafe(buffer.length);
           for (let i = 0; i < buffer.length; i += 2) {
-            // Swap bytes within each 16-bit register
             swappedBuffer[i] = buffer[i + 1];
             swappedBuffer[i + 1] = buffer[i];
           }
-          // Convert buffer to ASCII string, removing null bytes and trim
-          return swappedBuffer.toString('ascii').replace(/\0/g, '').trim();
+          const withSwap = swappedBuffer.toString('ascii').replace(/\0/g, '').trim();
+
+          this.logger.debug(`ASCII no swap: "${noSwap}"`);
+          this.logger.debug(`ASCII with swap: "${withSwap}"`);
+
+          // For now, return without swap to see the original
+          return noSwap;
 
         default:
           throw new Error(`Unknown register type: ${register.type}`);
