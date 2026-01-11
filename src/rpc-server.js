@@ -168,7 +168,8 @@ export class RpcServer {
   async start() {
     return new Promise((resolve, reject) => {
       try {
-        this.httpServer = http.createServer(this.server.middleware());
+        // Use jayson's built-in HTTP server
+        this.httpServer = this.server.http();
 
         this.httpServer.listen(this.config.port, () => {
           this.logger.info(`JSON-RPC server started on port ${this.config.port}`);
