@@ -479,11 +479,6 @@ Get configuration settings.
 }
 ```
 
-#### `getAllData()`
-Get all available data in a single call.
-
-**Returns:** Combined object with all data.
-
 ## Modbus Register Reference
 
 ### Register Categories

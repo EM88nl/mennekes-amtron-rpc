@@ -560,45 +560,6 @@ export class AmtronController {
   }
 
   /**
-   * Get all data at once
-   * NOTE: Executes sequentially to avoid overwhelming the Modbus RTU serial connection
-   * @returns {Promise<Object>} All available data
-   */
-  async getAllData() {
-    try {
-      // Execute sequentially to avoid Modbus RTU timeouts
-      // Modbus RTU is a serial protocol and cannot handle concurrent requests
-      const deviceInfo = await this.getDeviceInfo();
-      const status = await this.getStatus();
-      const voltage = await this.getVoltage();
-      const current = await this.getCurrent();
-      const power = await this.getPower();
-      const energy = await this.getEnergy();
-      const session = await this.getSessionData();
-      const diagnostics = await this.getDiagnostics();
-      const config = await this.getConfiguration();
-
-      return {
-        deviceInfo,
-        status,
-        measurements: {
-          voltage,
-          current,
-          power
-        },
-        energy,
-        session,
-        diagnostics,
-        configuration: config,
-        timestamp: new Date().toISOString()
-      };
-    } catch (error) {
-      this.logger.error(`Error getting all data: ${error.message}`);
-      throw error;
-    }
-  }
-
-  /**
    * Utility delay function
    * @param {number} ms - Milliseconds to delay
    * @returns {Promise<void>}

@@ -7,8 +7,8 @@ import jayson from 'jayson/promise/index.js';
 
 // Create RPC client
 const client = jayson.Client.http({
-  port: 8080,
-  hostname: 'localhost'
+  port: 8088,
+  hostname: '192.168.2.97'
 });
 
 /**
@@ -91,13 +91,7 @@ async function main() {
   await call('getDiagnostics');
   await call('getConfiguration');
 
-  // 7. Get All Data at Once
-  console.log('\n' + '='.repeat(60));
-  console.log('7. GET ALL DATA');
-  console.log('='.repeat(60));
-  await call('getAllData');
-
-  // 8. Control Examples (COMMENTED OUT FOR SAFETY)
+  // 7. Control Examples (COMMENTED OUT FOR SAFETY)
   console.log('\n' + '='.repeat(60));
   console.log('8. CONTROL EXAMPLES (COMMENTED OUT FOR SAFETY)');
   console.log('='.repeat(60));

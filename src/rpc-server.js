@@ -55,10 +55,7 @@ export class RpcServer {
 
       // Diagnostic methods
       getDiagnostics: this.wrapMethod(this.controller.getDiagnostics.bind(this.controller)),
-      getConfiguration: this.wrapMethod(this.controller.getConfiguration.bind(this.controller)),
-
-      // All data at once
-      getAllData: this.wrapMethod(this.controller.getAllData.bind(this.controller))
+      getConfiguration: this.wrapMethod(this.controller.getConfiguration.bind(this.controller))
     });
   }
 
