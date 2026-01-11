@@ -303,8 +303,16 @@ export class ModbusClient extends EventEmitter {
           return tempBuffer.readFloatBE(0);
 
         case 'ascii':
-          // Convert buffer to ASCII string, removing null bytes
-          return buffer.toString('ascii').replace(/\0/g, '').trim();
+          // For ASCII in Modbus, we need to swap bytes within each register
+          // Each register is 16 bits (2 bytes), but bytes might be reversed
+          const swappedBuffer = Buffer.allocUnsafe(buffer.length);
+          for (let i = 0; i < buffer.length; i += 2) {
+            // Swap bytes within each 16-bit register
+            swappedBuffer[i] = buffer[i + 1];
+            swappedBuffer[i + 1] = buffer[i];
+          }
+          // Convert buffer to ASCII string, removing null bytes and trim
+          return swappedBuffer.toString('ascii').replace(/\0/g, '').trim();
 
         default:
           throw new Error(`Unknown register type: ${register.type}`);
