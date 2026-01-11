@@ -374,8 +374,10 @@ export class ModbusClient extends EventEmitter {
 
     this.logger.info('Starting heartbeat transmission (0x55AA every 10s)...');
 
-    // Send immediately
-    this.sendHeartbeat();
+    // Wait 2 seconds before sending first heartbeat to avoid collision with device info reads
+    setTimeout(() => {
+      this.sendHeartbeat();
+    }, 2000);
 
     // Then send every 9 seconds (slightly faster than 10s requirement for safety)
     this.heartbeatInterval = setInterval(() => {

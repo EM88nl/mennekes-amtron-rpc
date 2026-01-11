@@ -137,7 +137,7 @@ async function start() {
 
     // Wait for device to be ready after connection
     logger.info('Waiting for device initialization...');
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Start heartbeat if enabled
     if (config.heartbeat.enabled) {

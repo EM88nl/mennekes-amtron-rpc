@@ -6,7 +6,7 @@
     "stopBits": 2,
     "parity": "none",
     "slaveId": 1,
-    "timeout": 1000,
+    "timeout": 2000,
     "reconnectInterval": 5000,
     "maxRetries": 3
   },
