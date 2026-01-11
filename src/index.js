@@ -135,6 +135,10 @@ async function start() {
     logger.info('Connecting to Modbus device...');
     await modbusClient.connect();
 
+    // Wait for device to be ready after connection
+    logger.info('Waiting for device initialization...');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Start heartbeat if enabled
     if (config.heartbeat.enabled) {
       logger.info('Starting heartbeat...');
