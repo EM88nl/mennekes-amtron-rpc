@@ -303,26 +303,12 @@ export class ModbusClient extends EventEmitter {
           return tempBuffer.readFloatBE(0);
 
         case 'ascii':
-          // Debug: Log the raw buffer
-          this.logger.debug(`Raw ASCII buffer for ${register.name}: ${buffer.toString('hex')}`);
-
-          // Try different byte orders to find which works
-          // Option 1: No swap (ABCD)
-          const noSwap = buffer.toString('ascii').replace(/\0/g, '').trim();
-
-          // Option 2: Swap bytes within each register (BADC)
-          const swappedBuffer = Buffer.allocUnsafe(buffer.length);
-          for (let i = 0; i < buffer.length; i += 2) {
-            swappedBuffer[i] = buffer[i + 1];
-            swappedBuffer[i + 1] = buffer[i];
-          }
-          const withSwap = swappedBuffer.toString('ascii').replace(/\0/g, '').trim();
-
-          this.logger.debug(`ASCII no swap: "${noSwap}"`);
-          this.logger.debug(`ASCII with swap: "${withSwap}"`);
-
-          // For now, return without swap to see the original
-          return noSwap;
+          // Convert buffer to ASCII string, removing null bytes
+          // Replace underscore padding with spaces for cleaner output
+          return buffer.toString('ascii')
+            .replace(/\0/g, '')  // Remove null bytes
+            .replace(/^_+/, '')  // Remove leading underscores (padding)
+            .trim();
 
         default:
           throw new Error(`Unknown register type: ${register.type}`);
