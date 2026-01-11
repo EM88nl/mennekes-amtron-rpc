@@ -285,15 +285,15 @@ export class ModbusClient extends EventEmitter {
           return buffer.readUInt16BE(0);
 
         case 'uint32':
-          // LowWord/HighWord order
-          return (buffer.readUInt16BE(2) << 16) | buffer.readUInt16BE(0);
+          // HighWord/LowWord order (ABCD byte order)
+          return (buffer.readUInt16BE(0) << 16) | buffer.readUInt16BE(2);
 
         case 'int16':
           return buffer.readInt16BE(0);
 
         case 'int32':
-          // LowWord/HighWord order
-          return (buffer.readInt16BE(2) << 16) | buffer.readInt16BE(0);
+          // HighWord/LowWord order (ABCD byte order)
+          return (buffer.readInt16BE(0) << 16) | buffer.readInt16BE(2);
 
         case 'float':
           // IEEE 754 float32 with big-endian byte order (ABCD)
@@ -335,9 +335,9 @@ export class ModbusClient extends EventEmitter {
           return [buffer.readUInt16BE(0)];
 
         case 'uint32':
-          // Write as LowWord/HighWord order
-          buffer.writeUInt16BE(value & 0xFFFF, 0);
-          buffer.writeUInt16BE((value >> 16) & 0xFFFF, 2);
+          // Write as HighWord/LowWord order (ABCD byte order)
+          buffer.writeUInt16BE((value >> 16) & 0xFFFF, 0);
+          buffer.writeUInt16BE(value & 0xFFFF, 2);
           return [buffer.readUInt16BE(0), buffer.readUInt16BE(2)];
 
         case 'int16':
@@ -345,9 +345,9 @@ export class ModbusClient extends EventEmitter {
           return [buffer.readUInt16BE(0)];
 
         case 'int32':
-          // Write as LowWord/HighWord order
-          buffer.writeInt16BE(value & 0xFFFF, 0);
-          buffer.writeInt16BE((value >> 16) & 0xFFFF, 2);
+          // Write as HighWord/LowWord order (ABCD byte order)
+          buffer.writeInt16BE((value >> 16) & 0xFFFF, 0);
+          buffer.writeInt16BE(value & 0xFFFF, 2);
           return [buffer.readUInt16BE(0), buffer.readUInt16BE(2)];
 
         case 'float':
